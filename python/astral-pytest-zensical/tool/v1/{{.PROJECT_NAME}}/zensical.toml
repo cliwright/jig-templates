@@ -1,0 +1,6 @@
+[project]
+site_name = "{{.PROJECT_NAME }} Documentation"
+
+nav = [
+  { "About" = "index.md" },
+]

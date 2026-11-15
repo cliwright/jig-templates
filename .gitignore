@@ -1,0 +1,9 @@
+# OS
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+
+# Scratch space for local render testing (jig render --output ./out …)
+/out/
