@@ -1,0 +1,57 @@
+version: "3"
+
+tasks:
+  setup:
+    desc: Create the dev environment and install dependencies
+    cmds:
+      - uv sync --extra dev
+
+  test:
+    desc: Run the test suite
+    cmds:
+      - uv run pytest tests
+
+  lint:
+    desc: Lint and type-check
+    cmds:
+      - uv run ruff check src tests
+      - uv run ty check src
+
+  docs:venv:
+    desc: Create the isolated docs environment (.docvenv) and install docs dependencies
+    env:
+      UV_PROJECT_ENVIRONMENT: .docvenv
+    cmds:
+      - uv sync --extra docs
+
+  docs:build:
+    desc: Build the documentation site
+    deps: [docs:venv]
+    env:
+      UV_PROJECT_ENVIRONMENT: .docvenv
+    cmds:
+      - uv run zensical build
+
+  docs:serve:
+    desc: Serve the documentation site locally
+    deps: [docs:venv]
+    env:
+      UV_PROJECT_ENVIRONMENT: .docvenv
+    cmds:
+      - uv run zensical serve
+
+  build:
+    desc: Build the wheel and sdist into dist/
+    cmds:
+      - uv build
+
+  publish:
+    desc: Publish the package to PyPI (needs UV_PUBLISH_TOKEN)
+    deps: [build]
+    cmds:
+      - uv publish
+
+  clean:
+    desc: Remove generated environments and build output
+    cmds:
+      - rm -rf .venv .docvenv site dist

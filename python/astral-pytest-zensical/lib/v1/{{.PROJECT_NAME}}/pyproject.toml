@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling==1.31.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "{{.PYTHON_PACKAGE}}"
+version = "0.1.0"
+description = "{{.DESCRIPTION}}"
+readme = "README.md"
+license = "{{.LICENSE}}"
+requires-python = ">= 3.11"
+
+authors = [{name = "{{.AUTHOR}}", email = "{{.EMAIL}}"}]
+maintainers = [{name = "{{.AUTHOR}}", email = "{{.EMAIL}}"}]
+
+dependencies = []
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/{{.PYTHON_PACKAGE}}"]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.16.9",
+    "pytest>=9.1.1",
+    "ty>=0.0.85",
+    "pytest-cov>=7.0.0"
+]
+
+docs = [
+    "zensical>=0.0.68",
+    "mkdocstrings-python==2.0.9",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+
+[tool.uv]
+package = true
