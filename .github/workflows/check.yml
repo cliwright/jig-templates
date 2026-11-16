@@ -1,0 +1,27 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  jig-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Installs the pinned jig binary from the GitHub release (see
+      # mise.toml); mise verifies the release checksums automatically.
+      - uses: jdx/mise-action@v5
+
+      # Check every version of every template, not just changed ones:
+      # the repo is small and a check run takes milliseconds per template.
+      - name: jig check all templates
+        run: |
+          set -euo pipefail
+          while IFS= read -r manifest; do
+            version_dir=$(dirname "$(dirname "$manifest")")
+            echo "== ${version_dir#./}"
+            jig check --template "$version_dir"
+          done < <(find . -path './.git' -prune -o -name jig.json -print | sort)

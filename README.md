@@ -1,7 +1,11 @@
 # jig-templates
 
+[![check](https://github.com/cliwright/jig-templates/actions/workflows/check.yml/badge.svg)](https://github.com/cliwright/jig-templates/actions/workflows/check.yml)
+
 Community project templates for [jig](https://jig.cliwright.dev) — the
-scaffolder with no hooks and no template-supplied code execution.
+scaffolder with no hooks and no template-supplied code execution. Docs at
+[jig.cliwright.dev](https://jig.cliwright.dev), source at
+[github.com/cliwright/jig](https://github.com/cliwright/jig).
 
 ## Use them
 
@@ -47,16 +51,11 @@ python/astral-pytest-zensical/tool/v1/{{.PROJECT_NAME}}/jig.json
 ## Contributing
 
 Templates are data — no hooks, no scripts, nothing that executes at render
-time, by design. Contributions are ordinary PRs:
-
-1. Scaffold with `jig new <language>/<flavor>/<kind> --templates-dir .` or
-  copy an existing template.
-2. Every template must pass `jig check --template <name> --templates-dir .`.
-3. Include a `README.md` next to the version directories (see the existing
-  templates) documenting what it renders and its variables.
-4. Never edit an existing `v<N>` in a breaking way — `jig bump` to the next
-  version instead.
+time, by design. Fork the repo and open a PR back against `main`; CI runs
+`jig check` on every version of every template. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for the conventions, and
+[SECURITY.md](SECURITY.md) for reporting anything sensitive.
 
 ## License
 
-[MIT](LICENSE)
+[Apache 2.0](LICENSE)
