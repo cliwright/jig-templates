@@ -29,10 +29,12 @@ python/astral-pytest-zensical/tool/v1/{{.PROJECT_NAME}}/jig.json
 ```
 
 - **flavor names encode the toolchain bundle.** jig templates are static
-  file trees — names and contents render, but the file *set* never changes.
-  Structural variation (different test runner, different docs tool) means a
-  different flavor, never a variable. Content variation (license, author)
-  is what variables and `choices` are for.
+  file trees — names and contents render. A name may render to an empty
+  string to *exclude* an optional file or directory (the conditional
+  mechanism), but that switches inclusion; it does not change structure.
+  Structural variation (different test runner, different docs tool) means
+  a different flavor, never a variable. Content variation (license,
+  author) is what variables and `choices` are for.
 - **versions are immutable directories.** Breaking layout changes mean a
   new `v<N>` (made with `jig bump`); renders pin theirs with `--version`,
   latest wins by default.
