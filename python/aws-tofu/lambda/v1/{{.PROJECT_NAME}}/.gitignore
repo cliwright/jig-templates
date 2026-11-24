@@ -1,0 +1,8 @@
+.venv/
+build/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+terraform.tfstate*
+tofu/.terraform/
+tofu/.terraform.lock.hcl

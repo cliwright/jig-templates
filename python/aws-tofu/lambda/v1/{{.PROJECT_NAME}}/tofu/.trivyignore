@@ -1,0 +1,4 @@
+# AVD-AWS-0017: CloudWatch log group encryption with a customer-managed
+# key is out of scope for this starter — add kms_key_id to
+# aws_cloudwatch_log_group when your compliance baseline requires it.
+AVD-AWS-0017

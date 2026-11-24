@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "variables": {
+    "PROJECT_NAME": {
+      "default": "my-lambda",
+      "prompt": "Project name",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "PYTHON_PACKAGE": {
+      "default": "{{ .PROJECT_NAME | replace \"-\" \"_\" }}",
+      "prompt": "Name of the python package under src/",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "AWS_REGION": {
+      "default": "eu-central-1",
+      "prompt": "AWS region to deploy to",
+      "pattern": "^[a-z]{2}-[a-z]+-[0-9]$"
+    },
+    "DESCRIPTION": {
+      "default": "A python AWS lambda deployed with OpenTofu",
+      "prompt": "A short one-sentence description"
+    },
+    "AUTHOR": {
+      "default": "John Doe",
+      "prompt": "The author, first and last name"
+    },
+    "EMAIL": {
+      "default": "john.doe@example.com",
+      "prompt": "The author email address"
+    },
+    "LICENSE": {
+      "default": "MIT",
+      "prompt": "Project license",
+      "choices": ["MIT", "Apache-2.0"]
+    }
+  }
+}
