@@ -1,0 +1,106 @@
+version: "3"
+
+tasks:
+  setup:
+    desc: Create the dev environment, install pre-commit hooks and tflint plugins
+    summary: |
+      Installs dev dependencies into .venv with uv, installs the
+      pre-commit and commit-msg hooks into the local git repository,
+      and downloads the tflint plugins declared in tofu/.tflint.hcl.
+    cmds:
+      - uv sync --extra dev
+      - pre-commit install --hook-type pre-commit --hook-type commit-msg
+      - tflint --chdir=tofu --init
+
+  fmt:
+    desc: Format python and OpenTofu files
+    summary: |
+      Runs ruff format over src and tests, and tofu fmt over tofu/.
+      The pre-commit hooks run the same commands, so committed code is
+      always formatted.
+    cmds:
+      - uv run ruff format src tests
+      - tofu -chdir=tofu fmt -recursive
+
+  lint:
+    desc: Lint and type-check python, lint OpenTofu
+    summary: |
+      Runs ruff check and ty over the python sources, and tflint with
+      the terraform recommended preset and AWS ruleset over tofu/.
+    cmds:
+      - uv run ruff check src tests
+      - uv run ty check src
+      - tflint --chdir=tofu
+
+  test:
+    desc: Run the test suite
+    summary: |
+      Runs the pytest suite. The tests exercise the handler directly;
+      no AWS credentials needed.
+    cmds:
+      - uv run pytest tests
+
+  package:
+    desc: Build the Lambda deployment zip into build/lambda.zip
+    summary: |
+      Installs the project and its runtime dependencies into
+      build/package with uv and zips it into build/lambda.zip, ready
+      for aws_lambda_function.
+    cmds:
+      - rm -rf build
+      - uv pip install --target build/package --python python .
+      - cd build/package && zip -qr ../lambda.zip .
+
+  validate:
+    desc: Validate the OpenTofu configuration
+    summary: |
+      Runs tofu init -backend=false and tofu validate in tofu/.
+      Downloads providers; needs network but no cloud credentials.
+    cmds:
+      - tofu -chdir=tofu init -backend=false
+      - tofu -chdir=tofu validate
+
+  plan:
+    desc: Plan the deployment
+    summary: |
+      Runs tofu plan against the package built by `task package`.
+      Needs real AWS credentials.
+    deps: [package]
+    cmds:
+      - tofu -chdir=tofu plan
+
+  deploy:
+    desc: Deploy the Lambda function to AWS
+    summary: |
+      Runs tofu apply against the package built by `task package`.
+      Needs real AWS credentials; state stays local until you
+      configure the s3 backend in tofu/backend.tf.
+    deps: [package]
+    cmds:
+      - tofu -chdir=tofu apply
+
+  scan:
+    desc: Security-scan the OpenTofu configuration with trivy
+    summary: |
+      Runs trivy config over tofu/ and fails on findings, so
+      misconfigurations are caught before they ship. Documented
+      exceptions live in tofu/.trivyignore.
+    cmds:
+      - trivy config --exit-code 1 --ignorefile tofu/.trivyignore tofu
+
+  changelog:
+    desc: Generate CHANGELOG.md from conventional commits
+    summary: |
+      Runs git-cliff with the cliff.toml config to regenerate
+      CHANGELOG.md from the conventional-commit history.
+    cmds:
+      - git-cliff -o CHANGELOG.md
+
+  clean:
+    desc: Remove build output and local OpenTofu working directories
+    summary: |
+      Deletes .venv, build/, and the .terraform working directory and
+      local state under tofu/.
+    cmds:
+      - rm -rf .venv build
+      - rm -rf tofu/.terraform tofu/.terraform.lock.hcl tofu/terraform.tfstate*

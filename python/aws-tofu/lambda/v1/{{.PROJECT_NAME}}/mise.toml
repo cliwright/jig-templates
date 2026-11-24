@@ -1,0 +1,9 @@
+[tools]
+python = "3.13"
+uv = "latest"
+opentofu = "1.13"
+task = "latest"
+pre-commit = "latest"
+git-cliff = "latest"
+tflint = "latest"
+trivy = "latest"
