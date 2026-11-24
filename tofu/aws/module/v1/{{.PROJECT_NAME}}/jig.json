@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "variables": {
+    "PROJECT_NAME": {
+      "default": "my-module",
+      "prompt": "Module name",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "DESCRIPTION": {
+      "default": "An OpenTofu AWS module",
+      "prompt": "A short one-sentence description"
+    },
+    "AUTHOR": {
+      "default": "John Doe",
+      "prompt": "The module author, first and last name"
+    },
+    "EMAIL": {
+      "default": "john.doe@example.com",
+      "prompt": "The module author email address"
+    },
+    "LICENSE": {
+      "default": "MIT",
+      "prompt": "Project license",
+      "choices": ["MIT", "Apache-2.0"]
+    }
+  }
+}

@@ -1,0 +1,76 @@
+version: "3"
+
+tasks:
+  setup:
+    desc: Install the pre-commit hooks and tflint plugins
+    summary: |
+      Installs the pre-commit and commit-msg hooks into the local git
+      repository and downloads the tflint plugins declared in
+      .tflint.hcl, so linting and commit checks work locally.
+    cmds:
+      - pre-commit install --hook-type pre-commit --hook-type commit-msg
+      - tflint --init
+
+  fmt:
+    desc: Format all OpenTofu files
+    summary: |
+      Runs tofu fmt recursively over the module and its examples. The
+      pre-commit hook runs the same command, so committed code is
+      always formatted.
+    cmds:
+      - tofu fmt -recursive
+
+  validate:
+    desc: Validate the module and the complete example
+    summary: |
+      Runs tofu init -backend=false and tofu validate in the module
+      root and in examples/complete, so the example never drifts from
+      the module's interface. Downloads providers; needs network but
+      no cloud credentials.
+    cmds:
+      - tofu init -backend=false
+      - tofu validate
+      - tofu -chdir=examples/complete init -backend=false
+      - tofu -chdir=examples/complete validate
+
+  lint:
+    desc: Lint the module with tflint
+    summary: |
+      Runs tflint with the terraform recommended preset and the AWS
+      ruleset (see .tflint.hcl).
+    cmds:
+      - tflint --recursive
+
+  scan:
+    desc: Security-scan the module with trivy
+    summary: |
+      Runs trivy config over the module and fails on findings, so
+      misconfigurations (open security groups, unencrypted storage,
+      ...) are caught before they ship.
+    cmds:
+      - trivy config --exit-code 1 .
+
+  docs:
+    desc: Regenerate the variables/outputs tables in README.md
+    summary: |
+      Runs terraform-docs to inject the module's inputs and outputs
+      into README.md between the BEGIN_TF_DOCS / END_TF_DOCS markers.
+    cmds:
+      - terraform-docs markdown table --output-file README.md --output-mode inject .
+
+  changelog:
+    desc: Generate CHANGELOG.md from conventional commits
+    summary: |
+      Runs git-cliff with the cliff.toml config to regenerate
+      CHANGELOG.md from the conventional-commit history.
+    cmds:
+      - git-cliff -o CHANGELOG.md
+
+  clean:
+    desc: Remove local OpenTofu working directories
+    summary: |
+      Deletes .terraform directories, lock files and local state from
+      the module and its examples.
+    cmds:
+      - rm -rf .terraform .terraform.lock.hcl terraform.tfstate*
+      - rm -rf examples/complete/.terraform examples/complete/.terraform.lock.hcl
