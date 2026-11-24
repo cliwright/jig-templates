@@ -1,0 +1,65 @@
+version: "3"
+
+tasks:
+  setup:
+    desc: Install the pre-commit hooks
+    summary: |
+      Installs the pre-commit and commit-msg hooks into the local git
+      repository so the formatters and the conventional-commit message
+      check run on every commit.
+    cmds:
+      - pre-commit install --hook-type pre-commit --hook-type commit-msg
+
+  fmt:
+    desc: Format all Go source files
+    summary: |
+      Runs gofmt over the module. The pre-commit hook runs the same
+      command, so committed code is always formatted.
+    cmds:
+      - gofmt -l -w .
+
+  lint:
+    desc: Vet the module for suspicious constructs
+    summary: |
+      Runs go vet over all packages to catch problems the compiler
+      misses, such as wrong printf verbs or unreachable code.
+    cmds:
+      - go vet ./...
+
+  test:
+    desc: Run the test suite
+    summary: |
+      Runs all tests in the module with go test.
+    cmds:
+      - go test ./...
+
+  build:
+    desc: Build the CLI binary into bin/
+    summary: |
+      Compiles the {{.PROJECT_NAME}} command to bin/{{.PROJECT_NAME}}.
+      Override the version with:
+      go build -ldflags "-X main.version=v1.2.3" -o bin/{{.PROJECT_NAME}} ./cmd/{{.PROJECT_NAME}}
+    cmds:
+      - go build -o bin/{{.PROJECT_NAME}} ./cmd/{{.PROJECT_NAME}}
+
+  run:
+    desc: Build and run the CLI
+    summary: |
+      Runs the CLI with go run, without leaving a binary behind.
+    cmds:
+      - go run ./cmd/{{.PROJECT_NAME}}
+
+  changelog:
+    desc: Generate CHANGELOG.md from conventional commits
+    summary: |
+      Runs git-cliff with the cliff.toml config to regenerate
+      CHANGELOG.md from the conventional-commit history.
+    cmds:
+      - git-cliff -o CHANGELOG.md
+
+  clean:
+    desc: Remove build output
+    summary: |
+      Deletes the bin/ directory containing built binaries.
+    cmds:
+      - rm -rf bin

@@ -1,0 +1,5 @@
+[tools]
+go = "1.27"
+task = "latest"
+pre-commit = "latest"
+git-cliff = "latest"

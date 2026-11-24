@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "variables": {
+    "PROJECT_NAME": {
+      "default": "my-project",
+      "prompt": "Project name",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "GO_MODULE": {
+      "default": "github.com/example/{{ .PROJECT_NAME }}",
+      "prompt": "Go module path",
+      "pattern": "^[a-z][a-z0-9./_-]*$"
+    },
+    "DESCRIPTION": {
+      "default": "A go cli tool",
+      "prompt": "A short one-sentence description"
+    },
+    "AUTHOR": {
+      "default": "John Doe",
+      "prompt": "The tool author, first and last name"
+    },
+    "EMAIL": {
+      "default": "john.doe@example.com",
+      "prompt": "The tool author email address"
+    },
+    "LICENSE": {
+      "default": "MIT",
+      "prompt": "Project license",
+      "choices": ["MIT", "Apache-2.0"]
+    }
+  }
+}
