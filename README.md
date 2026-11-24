@@ -49,6 +49,7 @@ python/astral-pytest-zensical/tool/v1/{{.PROJECT_NAME}}/jig.json
 | --- | --- |
 | [`python/astral-pytest-zensical/tool`](python/astral-pytest-zensical/tool/) | Python CLI on the astral toolchain (uv, hatchling, pytest, ruff, ty) with zensical docs, Taskfile targets, mise-pinned toolchain |
 | [`python/astral-pytest-zensical/lib`](python/astral-pytest-zensical/lib/) | Publishable Python library on the same toolchain, with `build`/`publish` PyPI targets instead of CLI wiring |
+| [`go/std/tool`](go/std/tool/) | Go CLI on the standard library toolchain (`flag`, go vet, gofmt) with pre-commit conventional commits and git-cliff changelog, Taskfile targets, mise-pinned toolchain |
 
 ## Contributing
 
